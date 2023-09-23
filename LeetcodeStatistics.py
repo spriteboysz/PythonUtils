@@ -26,7 +26,21 @@ def walk_data():
             if file.startswith("P"):
                 name = name.split(".")[0]
                 record1[name][suffix] += 1
-            elif file[0] in ['O', '面', '剑'] or file.startswith("LC"):
+            elif file.startswith('面'):
+                name = file[:9]
+                record2[name][suffix] += 1
+            elif file.startswith('M0'):
+                name = "面试题 " + file[3:5] + "." + file[7:9]
+                record2[name][suffix] += 1
+            elif file.startswith("LC"):
+                if "." in name:
+                    name = name.split(".")[0]
+                elif file.startswith("LCP") or file.startswith("LCS"):
+                    name = file[:3] + " " + file[5:7]
+                elif file.startswith("LCR"):
+                    name = "LCR " + file[4:7]
+                record2[name][suffix] += 1
+            elif file[0] in ['O', '剑']:
                 record2[name][suffix] += 1
     return record1, record2
 
@@ -36,6 +50,8 @@ def to_grid(record):
     m, n = len(rows), len(language)
     grid = [["" for _ in range(n + 2)] for _ in range(m + 1)]
 
+    grid[0][0] = "题目列表"
+    grid[0][1] = "统计"
     for j, lan in enumerate(language):
         grid[0][j + 2] = lan
     for i, row in enumerate(rows):
@@ -44,14 +60,14 @@ def to_grid(record):
     for i, row in enumerate(rows):
         for j, lan in enumerate(language):
             if record[row][lan] > 0:
-                grid[i + 1][j + 2] = "1"
+                grid[i + 1][j + 2] = "√"
     return grid
 
 
 def to_excel(grids):
     with xlwings.App(visible=True, add_book=False) as app:
         workbook = app.books.add()
-        for i, grid in enumerate(grids):
+        for grid in grids:
             sheet = workbook.sheets.add()
             sheet.range("A1").value = grid
             sheet.autofit()
