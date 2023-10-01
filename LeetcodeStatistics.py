@@ -77,7 +77,6 @@ def to_excel(grids):
             sheet.autofit()
             sheet.range("C3").select()
             workbook.app.api.ActiveWindow.FreezePanes = True
-            # sheet.range("A1").api.AutoFilter(1, "<>", True)
         workbook.save(excel_file)
         workbook.close()
 
