@@ -55,7 +55,8 @@ def to_grid(record):
     grid = [["" for _ in range(n + 2)] for _ in range(m + 2)]
 
     grid[0][0] = "题目列表"
-    grid[0][1] = "统计"
+    grid[0][1] = "行统计"
+    grid[1][0] = "列统计"
     for j, lan in enumerate(language):
         grid[0][j + 2] = lan
     for i, row in enumerate(rows):
@@ -74,6 +75,11 @@ def to_excel(grids):
         for grid in grids:
             sheet = workbook.sheets.add()
             sheet.range("A1").value = grid
+            maximum = sheet.range('A1').expand().last_cell.row
+            sheet.range("B2").formula = f'=sum(B3:B{maximum})'
+            for i in range(len(language)):
+                column = xlwings.utils.col_name(i + 3)
+                sheet.range(f"{column}2").formula = f'=COUNTA({column}3:{column}{maximum})'
             sheet.autofit()
             sheet.range("C3").select()
             workbook.app.api.ActiveWindow.FreezePanes = True
