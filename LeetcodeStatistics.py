@@ -58,7 +58,7 @@ def to_grid(record):
     grid[0][1] = "行统计"
     grid[1][0] = "列统计"
     for j, lan in enumerate(language):
-        grid[0][j + 2] = lan
+        grid[0][j + 2] = lan.upper()
     for i, row in enumerate(rows):
         grid[i + 2][0] = row
         grid[i + 2][1] = str(len(record[row]))
@@ -75,12 +75,15 @@ def to_excel(grids):
         for grid in grids:
             sheet = workbook.sheets.add()
             sheet.range("A1").value = grid
-            maximum = sheet.range('A1').expand().last_cell.row
-            sheet.range("B2").formula = f'=sum(B3:B{maximum})'
+            sheet.autofit()
+            max_row = sheet.range('A1').expand().last_cell.row
+            max_col = xlwings.utils.col_name(sheet.range('A1').expand().last_cell.column)
+            sheet.range("B2").formula = f'=sum(B3:B{max_row})'
             for i in range(len(language)):
                 column = xlwings.utils.col_name(i + 3)
-                sheet.range(f"{column}2").formula = f'=COUNTA({column}3:{column}{maximum})'
-            sheet.autofit()
+                sheet.range(f"{column}2").formula = f'=COUNTA({column}3:{column}{max_row})'
+            sheet.range(f'B1:{max_col}{max_row}').api.HorizontalAlignment = -4108
+            sheet.range(f'B1:{max_col}{max_row}').column_width = 8
             sheet.range("C3").select()
             workbook.app.api.ActiveWindow.FreezePanes = True
         workbook.save(excel_file)
