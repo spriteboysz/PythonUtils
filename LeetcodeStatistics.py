@@ -24,23 +24,23 @@ def walk_data():
             suffix = file.split(".")[-1]
             name = file[:-(len(suffix) + 1)]
             # 基础算法题
-            if file.startswith("P"):
+            if file.upper().startswith("P"):
                 name = name.split(".")[0]
                 record1[name][suffix] += 1
             # 面试题
             elif file.startswith('面'):
                 name = file[:9]
                 record2[name][suffix] += 1
-            elif file.startswith('M0'):
+            elif file.upper().startswith('M0'):
                 name = "面试题 " + file[3:5] + "." + file[7:9]
                 record2[name][suffix] += 1
             # LCP LCR LCS
-            elif file.startswith("LC"):
+            elif file.upper().startswith("LC"):
                 if "." in name:
                     name = name.split(".")[0]
-                elif file.startswith("LCP") or file.startswith("LCS"):
+                elif file.upper().startswith("LCP") or file.upper().startswith("LCS"):
                     name = file[:3] + " " + file[5:7]
-                elif file.startswith("LCR"):
+                elif file.upper().startswith("LCR"):
                     name = "LCR " + file[4:7]
                 record2[name][suffix] += 1
             # 剑指题
