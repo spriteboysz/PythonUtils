@@ -13,7 +13,7 @@ import xlwings
 
 language = ["java", "py", "rb", "cpp", "c", "go", "js", "cs", "rs", "kt", "sql"]
 leetcode_path = r'D:\02_CODE'
-excel_file = r'D:\08_PYTH\PythonUtils\LeetCode记录.xlsx'
+excel_file = r'/LeetCode记录.xlsx'
 
 
 def walk_data():
